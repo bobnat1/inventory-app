@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {Item}= require('../models/index');
+const logger = require('../log')
 
 //GET all items
 router.get('/', async (req, res, next) => {
     try {
         const items = await Item.findAll();
+        // logger.log({level: "info", message: "User is requesting all the items."});
         res.status(200).json(items);
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
@@ -19,6 +21,7 @@ router.get('/:id', async (req, res, next) => {
         const item = await Item.findByPk(req.params.id);
         !item ? res.status(404).json({ message: `Item Not Found` }) :
             res.status(200).json(item);
+            logger.info(`User is requesting ${item.name}`)
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
         next(error);
@@ -32,6 +35,7 @@ router.post('/', async (req, res, next) => {
         const newItem = await Item.create({ name, description, price, category, image });
         !newItem ? res.status(400).json({ message: `Item Not Created` }) :
             res.status(201).json(newItem);
+            logger.info(`User has added ${newItem.name}`)
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
         next(error);
@@ -47,8 +51,10 @@ router.delete('/:id', async (req, res, next) => {
                 id: itemId,
             }
         })
-        if (deletedItem)
+        if (deletedItem) {
             res.status(200).json({message: deletedItem.name + " has been deleted!"})
+            logger.info(`User has deleted item ID# ${itemId}`)
+        }    
         else
             res.status(500).json({message: "no item deleted"})
 
@@ -68,8 +74,10 @@ router.put('/:id', async (req, res, next) => {
             returning: true,
         })
 
-        if (updatedItem)
+        if (updatedItem){
             res.status(200).json({message: "Item has been updated!"})
+            logger.info(`User has updated ${updatedItem.name}`)
+        }
         else
             res.status(500).json({message: "no item updated"})
 
