@@ -11,6 +11,7 @@ router.get('/', async (req, res, next) => {
         res.status(200).json(items);
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
+        logger.error('Server Error')
         next(error);
     }
 })
@@ -24,6 +25,7 @@ router.get('/:id', async (req, res, next) => {
             logger.info(`User is requesting ${item.name}`)
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
+        logger.error('Server Error')
         next(error);
     }
 })
@@ -38,6 +40,7 @@ router.post('/', async (req, res, next) => {
             logger.info(`User has added ${newItem.name}`)
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
+        logger.error('Server Error')
         next(error);
     }
 })
@@ -60,6 +63,7 @@ router.delete('/:id', async (req, res, next) => {
 
     } catch (error){
         res.status(500).json({ message: `Server Error`});
+        logger.error('Server Error')
         next(error);
     }
 })
@@ -83,6 +87,7 @@ router.put('/:id', async (req, res, next) => {
 
     } catch (error) {
         res.status(500).json({ message: `Server Error`});
+        logger.error('Server Error')
         next(error);
     }
 })

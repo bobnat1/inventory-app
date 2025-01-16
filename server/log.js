@@ -9,7 +9,9 @@ const remoteIP = process.env.REMOTE_IP;
 if (logLocation === "remote"){
   logger = winston.createLogger({
     level: 'info',   
-    format: combine(timestamp(), json()),
+    format: combine(timestamp({
+      format: 'YYYY-MM-DD hh:mm:ss.SSS A', // 2022-01-25 03:23:10.350 PM
+    }), json()),
     transports: [new winston.transports.Syslog({
       host: remoteIP, // Change this if rsyslog is on another server
       port: 514, // Default syslog port (UDP)
